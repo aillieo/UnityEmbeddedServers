@@ -1,0 +1,9 @@
+{
+  "name": "com.aillieo.unity-http-server",
+  "displayName": "AillieoUtils Unity Http Server",
+  "description": "AillieoUtils Unity Http Server",
+  "version": "1.0.0",
+  "unity": "2019.4",
+  "license": "MIT",
+  "dependencies": {}
+}
