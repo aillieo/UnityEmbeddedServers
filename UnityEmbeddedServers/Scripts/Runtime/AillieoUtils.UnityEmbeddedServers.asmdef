@@ -1,5 +1,5 @@
 {
-    "name": "AillieoUtils.UnityHttpServer",
+    "name": "AillieoUtils.UnityEmbeddedServers",
     "references": [
         "AillieoUtils.ReflectionUtils"
     ],

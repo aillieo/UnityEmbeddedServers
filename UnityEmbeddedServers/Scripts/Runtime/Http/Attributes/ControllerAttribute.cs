@@ -1,6 +1,6 @@
 using System;
 
-namespace AillieoUtils.UnityHttpServer
+namespace AillieoUtils.UnityEmbeddedServers
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ControllerAttribute : Attribute

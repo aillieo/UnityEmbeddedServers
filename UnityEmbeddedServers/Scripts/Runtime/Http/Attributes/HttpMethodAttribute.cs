@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 
-namespace AillieoUtils.UnityHttpServer
+namespace AillieoUtils.UnityEmbeddedServers
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class HttpMethodAttribute : Attribute
