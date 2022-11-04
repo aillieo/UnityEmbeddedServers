@@ -4,11 +4,12 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace AillieoUtils.UnityHttpServer
+namespace AillieoUtils.UnityEmbeddedServers.Http
 {
     public class HttpServer : IDisposable
     {
@@ -106,6 +107,10 @@ namespace AillieoUtils.UnityHttpServer
             if (methodInfo == null)
             {
                 response.StatusCode = 404;
+                using (StreamWriter writer = new StreamWriter(response.OutputStream))
+                {
+                    writer.Write("Page not found.");
+                }
 
                 return;
             }
@@ -130,19 +135,69 @@ namespace AillieoUtils.UnityHttpServer
                     writer.Write(e.Message);
                 }
 
-                UnityEngine.Debug.LogError($"{e.Message}");
+                UnityEngine.Debug.LogException(e);
             }
         }
 
         public static IPAddress GetLocalIPAddress()
         {
-            IPAddress[] addresses = Dns.GetHostAddresses(Dns.GetHostName());
-            foreach (IPAddress address in addresses)
+            try
             {
-                if (address.AddressFamily == AddressFamily.InterNetwork)
+                NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+                foreach (NetworkInterface network in networkInterfaces)
                 {
-                    return address;
+                    IPInterfaceProperties properties = network.GetIPProperties();
+
+                    foreach (IPAddressInformation address in properties.UnicastAddresses)
+                    {
+                        if (address.Address.AddressFamily != AddressFamily.InterNetwork)
+                        {
+                            continue;
+                        }
+
+                        if (IPAddress.IsLoopback(address.Address))
+                        {
+                            continue;
+                        }
+
+                        return address.Address;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError(e);
+            }
+
+            try
+            {
+                IPAddress[] addresses = Dns.GetHostAddresses(Dns.GetHostName());
+                foreach (IPAddress address in addresses)
+                {
+                    if (address.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        return address;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError(e);
+            }
+
+            try
+            {
+                using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+                {
+                    socket.Connect("8.8.8.8", 65530);
+                    IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                    return endPoint.Address;
+                }
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError(e);
             }
 
             return null;

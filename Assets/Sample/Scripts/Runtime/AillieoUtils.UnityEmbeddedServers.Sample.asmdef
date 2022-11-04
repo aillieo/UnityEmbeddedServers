@@ -1,7 +1,7 @@
 {
-    "name": "AillieoUtils.UnityHttpServer.Sample",
+    "name": "AillieoUtils.UnityEmbeddedServers.Sample",
     "references": [
-        "AillieoUtils.UnityHttpServer"
+        "AillieoUtils.UnityEmbeddedServers"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

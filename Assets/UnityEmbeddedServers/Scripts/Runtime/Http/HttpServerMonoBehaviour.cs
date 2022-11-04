@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AillieoUtils.UnityHttpServer
+namespace AillieoUtils.UnityEmbeddedServers.Http
 {
     public class HttpServerMonoBehaviour : MonoBehaviour
     {
@@ -10,7 +10,7 @@ namespace AillieoUtils.UnityHttpServer
         private bool autoStart = true;
 
         [SerializeField]
-        private int port = 10250;
+        private int port = 8080;
 
         private void Start()
         {

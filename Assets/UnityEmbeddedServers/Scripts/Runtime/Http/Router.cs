@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using AillieoUtils.CSReflectionUtils;
 using UnityEngine;
 
-namespace AillieoUtils.UnityHttpServer
+namespace AillieoUtils.UnityEmbeddedServers.Http
 {
     internal static class Router
     {
