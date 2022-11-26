@@ -7,9 +7,11 @@ using System.Collections.Generic;
 
 namespace AillieoUtils.UnityEmbeddedServers.Tcp
 {
-    public class TcpServer
+    public class TcpServer: IDisposable
     {
         public event Action<IPEndPoint, byte[]> onReceive;
+
+        public event Action<TcpClient> onClientConnected;
 
         private TcpListener tcpListener;
         private CancellationTokenSource cancelationTokenSource;
@@ -130,6 +132,16 @@ namespace AillieoUtils.UnityEmbeddedServers.Tcp
         private void OnClientConnected(TcpClient tcpClient)
         {
             clients.Add(tcpClient);
+
+            try
+            {
+                onClientConnected?.Invoke(tcpClient);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogException(e);
+            }
+
             Receive(tcpClient);
         }
 
@@ -157,6 +169,11 @@ namespace AillieoUtils.UnityEmbeddedServers.Tcp
             }
 
             cancelationTokenSource.Cancel();
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }
 }
